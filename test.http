@@ -1,0 +1,19 @@
+@uri = http://127.0.0.1:8082/
+GET {{uri}}blog
+
+###
+GET http://127.0.0.1:8082/blog/5efd5215e2aa033cf4d3819f
+
+###
+POST {{uri}}blog
+Content-Type: application/json
+
+{
+    "name": "xiaohong",
+    "text": "你好",
+    "date": "2020-07-02",
+    "title": "产品"
+}
+
+###
+DELETE {{uri}}blog/5efd8e4a9dc050527c271a32
