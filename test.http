@@ -1,11 +1,27 @@
-@uri = http://127.0.0.1:8082/
-GET {{uri}}blog
+@uri = http://127.0.0.1:3000
+@url = http://127.0.0.1:8082
+@json = Content-Type: application/json
+GET {{uri}}/blog
+
+###
+###
+POST http://127.0.0.1:3000/categories
+{{json}}
+
+
+
+
+
+
+
+
+
 
 ###
 GET http://127.0.0.1:8082/blog/5efd5215e2aa033cf4d3819f
 
 ###
-POST {{uri}}blog
+POST {{uri}}/blog
 Content-Type: application/json
 
 {
@@ -16,4 +32,29 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{uri}}blog/5efd8e4a9dc050527c271a32
+DELETE {{uri}}/blog/5efd8e4a9dc050527c271a32
+
+###
+GET http://127.0.0.1:3000/users
+
+###
+POST http://127.0.0.1:3000/register
+{{json}}
+
+{
+    "username": "aaaaaaa",
+    "password": "aaa123456"
+}
+
+###
+POST {{uri}}/login
+{{json}}
+
+{
+    "username": "aaaaaaa",
+    "password": "aaa123456"
+}
+
+### 个人信息
+GET {{uri}}/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZmRiMDgyMzc3MGJmMDQ5Y2MxNzFhOCIsImlhdCI6MTU5MzY4NDExMn0.5QlNe7Ymhc2M3NVQmCglJXfJBB6ykFFVjDKhVu6FZZo
