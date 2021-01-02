@@ -134,7 +134,7 @@ User.insertMany([
     { 
         userName: 'archerx',
         email: '98583067@qq.com',
-        password: 'archerx'
+        password: '123456'
     }
 ])
 
