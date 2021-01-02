@@ -35,15 +35,14 @@ Content-Type: application/json
 DELETE {{uri}}/blog/5efd8e4a9dc050527c271a32
 
 ###
-GET http://127.0.0.1:3000/users
+GET http://127.0.0.1:3000/article/1
 
 ###
-POST http://127.0.0.1:3000/register
-{{json}}
+POST http://127.0.0.1:3000/article/list
+Content-Type: application/json
 
 {
-    "username": "aaaaaaa",
-    "password": "aaa123456"
+    "page": 1
 }
 
 ###
@@ -58,3 +57,6 @@ POST {{uri}}/login
 ### 个人信息
 GET {{uri}}/profile
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZmRiMDgyMzc3MGJmMDQ5Y2MxNzFhOCIsImlhdCI6MTU5MzY4NDExMn0.5QlNe7Ymhc2M3NVQmCglJXfJBB6ykFFVjDKhVu6FZZo
+
+###
+GET https://api-hmugo-web.itheima.net/api/public/v1/categories

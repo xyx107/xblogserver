@@ -1,18 +1,18 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
-mongoose.connect("mongodb://localhost:27017/xblog", { 
-    useNewUrlParser: true, 
-    useCreateIndex: true,
-    useUnifiedTopology: true 
-});
+// mongoose.connect("mongodb://localhost:27017/xblog", { 
+//     useNewUrlParser: true, 
+//     useCreateIndex: true,
+//     useUnifiedTopology: true 
+// });
 
-mongoose.connection
-    .on('error', console.error.bind(console, 'connection error:连接失败'))
-    .once('open', function() { console.log("we're connected!") })
+// mongoose.connection
+//     .on('error', console.error.bind(console, 'connection error:连接失败'))
+//     .once('open', function() { console.log("we're connected!") })
 
 const UserSchema = new mongoose.Schema({
     username: { required: true, type: String, unique: true },
-    password: { 
+    password: {
         required: true, 
         type: String,
         set(val) {
@@ -20,6 +20,7 @@ const UserSchema = new mongoose.Schema({
         }
     }
 })
+
 
 const User = mongoose.model('User', UserSchema)
 

@@ -11,19 +11,48 @@ var Schema = mongoose.Schema;
 
 
 app.use(express.json()) // 允许express 处理返回的数据
+
 app.use('/public', express.static('public'));
+
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(multer({ dest: '/tmp/'}).array('image'));// 可以访问http://127.0.0.1:8081/public/imgs/3.jpg
 
 mongoose.connect("mongodb://localhost:27017/xblog", { useNewUrlParser: true, useUnifiedTopology: true });
-
 mongoose.connection
     .then( res => { console.log('数据库连接成功')})
     .on('error', console.error.bind(console, 'connection error:连接失败'))
     .once('open', function() {
         console.log("we're connected!"); 
 })
+
+
+const cors = require('cors')
+// 使用cors解决跨域
+app.use(cors())
+var corsOptions = {
+    // origin: 'http://127.0.0.1:8080', //只有origin可以访问
+    optionsSuccessStatus: 200 ,
+    // exposeHeaders: ['Authorization'],
+    alloweHeaders:['Conten-Type', 'Authorization']
+  }
+
+app.use(express.json()) 
+// app.use(cookieParser())
+
+// // 解决跨域
+// app.use('*',function (req, res, next) {
+//   res.header('Access-Control-Allow-Origin', '*'); //这个表示任意域名都可以访问，这样写不能携带cookie了。
+// //res.header('Access-Control-Allow-Origin', 'http://www.baidu.com'); //这样写，只有www.baidu.com 可以访问。
+//   res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With');
+//   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');//设置方法
+//   if (req.method == 'OPTIONS') {
+//     res.send(200); // 意思是，在正常的请求之前，会发送一个验证，是否可以请求。
+//   }
+//   else {
+//     next();
+//   }
+// });
 
 // const blogSchema = new Schema({ })
 // module.exports = mongoose.model('blog', blogSchema)
@@ -151,11 +180,7 @@ app.route('/blog')
 // })g
 
 
-app.get('/', function (req, res) {
-    // 向弄的技术服务器发cookie信息，输出了客户端发送的。
-    console.log("Cookies: " + util.inspect(req.cookies));
-    res.send('Hello World');
-})
+
 
 app.get('/index.html', function (req, res) {
     res.sendFile(__dirname + "/" + "index.html");
@@ -225,7 +250,19 @@ app.get('/ab*cd', function (req, res) {
     res.send('正则匹配');
 })
 
+app.get('/api/orders', auth, async (req, res) => {
+    const orders = await User.find().where({
+        user:req.user//mongo会自动匹配id
+    })
+    res.send(req.user)
+})
 
+
+app.get('/', function (req, res) {
+    // 向弄的技术服务器发cookie信息，输出了客户端发送的。
+    console.log("Cookies: " + util.inspect(req.cookies));
+    res.send('Hello World');
+})
 var server = app.listen(8082, function () {
 
     var host = server.address().address

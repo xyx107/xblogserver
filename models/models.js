@@ -17,12 +17,12 @@ const CategorySchema = new mongoose.Schema({
 
 // 用户信息
 const UserSchema = new mongoose.Schema({
-    username: { required: true, type: String, unique: true },
+    userName: { required: true, type: String, unique: true },
     password: { 
         required: true, 
         type: String,
         set(val) {
-            return require('bcrypt').hashSync(val, 5) // 将密码同步散列
+            return require('bcrypt').hashSync(val) // 将密码同步散列
         }
     }
 })
