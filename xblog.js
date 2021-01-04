@@ -119,17 +119,17 @@ Article.insertMany([
     // }
 ])
 
-// const User = mongoose.model('User', new mongoose.Schema({
-//     userName: String,
-//     password: {
-//         type: String, 
-//         set(val) {
-//             // 再存数据库时把密码散列了,hashSync第二个参数表示散列强度，在这里只能用同步方法
-//             return require('bcrypt').hashSync(val)
-//         }
-//     },
-//     email: String
-// }))
+const User = mongoose.model('User', new mongoose.Schema({
+    userName: String,
+    password: {
+        type: String, 
+        set(val) {
+            // 再存数据库时把密码散列了,hashSync第二个参数表示散列强度，在这里只能用同步方法
+            return require('bcrypt').hashSync(val)
+        }
+    },
+    email: String
+}))
 // User.insertMany([
 //     // { 
 //     //     userName: 'archerx',
