@@ -6,6 +6,12 @@ app.use(express.json())
 const sendEmail = require('./utils/SendMail')
 const jwt = require('jsonwebtoken')
 const SECRET = 'aaaaa' //secret: 应该写在一个.env环境文件里
+const bcrypt = require('bcrypt')
+
+//生成salt的迭代次数
+const saltRounds = 5
+//随机生成salt
+const salt = bcrypt.genSaltSync(saltRounds)
 
 const mongoose = require('mongoose')
 mongoose.connect('mongodb://xyx107:1962@localhost:27017/xblog?authSource=admin', {
@@ -23,6 +29,7 @@ const Code = mongoose.model('Code', new mongoose.Schema({
 //         Code: '1233456' 
 //     }
 // ])
+
 // // 博客列表
 // const BlogListSchema = new mongoose.Schema(
 //     {
@@ -125,7 +132,7 @@ const User = mongoose.model('User', new mongoose.Schema({
         type: String, 
         set(val) {
             // 再存数据库时把密码散列了,hashSync第二个参数表示散列强度，在这里只能用同步方法
-            return require('bcrypt').hashSync(val)
+            return bcrypt.hashSync(val, salt)
         }
     },
     email: String
@@ -193,13 +200,16 @@ app.post('/api/register', async (req, res) => {
             password: req.body.password,
             email: req.body.email
         })
+
         await Code.deleteOne({email: req.body.email})
         console.log('ok')
         res.send(user)
     } else {
-        return res.status(422).send({
-            message:'验证码错误'
-        })
+        const data = {
+            message:'验证码错误',
+            code: 0
+        }
+        return res.status(422).send(data)
     }
 })
 
@@ -209,19 +219,24 @@ app.post('/api/login', async (req, res) => {
     const userValid = await User.findOne({
         userName: req.body.username
     })
-    const isPasswordValid = require('bcrypt').compareSync(
+
+    const isPasswordValid = bcrypt.compareSync(
         req.body.password,
         userValid.password
     )
+    console.log(req.body.password,
+        userValid.password)
     if(!userValid) {
         console.log("用户不存在")
         return res.status(422).send({
             message:'用户不存在'
         })
     } else if(!isPasswordValid) {
-        return res.status(422).send({
-            message: '密码错误'
-        })
+        const data = {
+            message:'密码错误',
+            code: 0
+        }
+        return res.status(422).send(data)
     } else {
         const token = jwt.sign(
             { id: String(userValid._id) },
